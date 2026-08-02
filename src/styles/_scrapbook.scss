@@ -14,10 +14,10 @@
   background: $color-paper;
   border-radius: $radius-sm;
   box-shadow: $shadow-lift;
-  transform: rotate(-1.5deg);
+  transform: rotate(var(--photo-tilt, -1.5deg));
 
   .letter-section--alt & {
-    transform: rotate(1.5deg);
+    transform: rotate(var(--photo-tilt, 1.5deg));
   }
 }
 
@@ -154,3 +154,9 @@
   line-height: 1.8;
   color: $color-text;
 }
+
+.photo-frame__corner { position: absolute; bottom: .75rem; width: 21px; height: 21px; border-bottom: 2px solid rgba(166,124,82,.24); z-index: 2; }
+.photo-frame__corner--left { left: .75rem; border-left: 2px solid rgba(166,124,82,.24); }
+.photo-frame__corner--right { right: .75rem; border-right: 2px solid rgba(166,124,82,.24); }
+.photo-frame__flower { position: absolute; bottom: -.8rem; left: -.7rem; color: rgba(173,113,93,.62); font-size: 1.7rem; transform: rotate(-18deg); }
+.photo-frame__duck { position: absolute; top: -.52rem; right: .35rem; width: 22px; height: 22px; display: grid; place-items: center; background: rgba(246,204,79,.7); color: rgba(119,96,50,.7); font-size: .7rem; transform: rotate(6deg); }

@@ -57,6 +57,7 @@ export default function Section({ section, index }) {
             <PhotoFrame
               src={section.image}
               alt={section.imageAlt || section.title}
+              index={index}
             />
           </Reveal>
         )}

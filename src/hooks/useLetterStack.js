@@ -15,6 +15,7 @@ export function useLetterStack(sectionCount) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [readCount, setReadCount] = useState(0);
   const [restored, setRestored] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
   // Restore saved progress once on mount.
   useEffect(() => {
@@ -30,11 +31,13 @@ export function useLetterStack(sectionCount) {
     } catch {
       /* ignore corrupted storage */
     }
+    setHydrated(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Persist progress whenever it changes.
   useEffect(() => {
+    if (!hydrated) return;
     const id = requestAnimationFrame(() => {
       try {
         localStorage.setItem(
@@ -46,7 +49,7 @@ export function useLetterStack(sectionCount) {
       }
     });
     return () => cancelAnimationFrame(id);
-  }, [currentIndex]);
+  }, [currentIndex, hydrated]);
 
   const next = () => {
     if (readCount >= sectionCount) return;
@@ -69,6 +72,17 @@ export function useLetterStack(sectionCount) {
     setReadCount(safe);
   };
 
+  const reset = () => {
+    setCurrentIndex(0);
+    setReadCount(0);
+    setRestored(false);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* storage unavailable */
+    }
+  };
+
   const hasRead = (index) => index < readCount;
   const isCurrent = (index) => index === currentIndex;
   const isUnread = (index) => index >= readCount;
@@ -78,9 +92,11 @@ export function useLetterStack(sectionCount) {
     currentIndex,
     readCount,
     restored,
+    hydrated,
     next,
     prev,
     goTo,
+    reset,
     hasRead,
     isCurrent,
     isUnread,

@@ -5,6 +5,7 @@ import { site } from "../content/site";
 import Envelope from "./components/Envelope";
 import Letter from "./components/Letter";
 import MusicPlayer from "./components/MusicPlayer";
+import ReturnEnvelope from "./components/ReturnEnvelope";
 import { useLetterStack } from "./hooks/useLetterStack";
 
 /**
@@ -34,14 +35,16 @@ const activeOffsets = [
 
 export default function App() {
   const [opened, setOpened] = useState(false);
-  const [returned, setReturned] = useState(false);
+  const [closing, setClosing] = useState(false);
   const {
     currentIndex,
     readCount,
     restored,
+    hydrated,
     next,
     prev,
     isComplete,
+    reset,
   } = useLetterStack(sections.length);
 
   // Keyboard navigation — intentional, no autoplay.
@@ -55,21 +58,31 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, readCount]);
 
+  useEffect(() => {
+    if (hydrated && restored) setOpened(true);
+  }, [hydrated, restored]);
+
   // Show the envelope on first visit, or after reading all letters
   // (the closure moment). When returning mid-way on a refresh,
   // skip straight back to the letter.
-  const showEnvelope = !opened && (!restored || returned);
+  const showEnvelope = hydrated && !opened && !closing && !restored;
 
   // Once all letters are read, pause, then return the stack to the envelope.
   useEffect(() => {
-    if (isComplete && !returned) {
+    if (isComplete && opened && !closing) {
       const t = setTimeout(() => {
-        setReturned(true);
+        setClosing(true);
         setOpened(false);
-      }, 2500);
+      }, 1250);
       return () => clearTimeout(t);
     }
-  }, [isComplete, returned]);
+  }, [isComplete, opened, closing]);
+
+  const replay = () => {
+    reset();
+    setClosing(false);
+    setOpened(false);
+  };
 
   const activeSection = sections[currentIndex];
   const unreadLetters = sections.filter(
@@ -121,7 +134,7 @@ export default function App() {
 
           {/* Read stack — right, growing */}
           <div className="letter-stack letter-stack--read" aria-hidden="true">
-            {readLetters.map((section, i) => (
+            {(isComplete ? sections : readLetters).map((section, i) => (
               <motion.div
                 key={section.id}
                 className="letter-stack__peek"
@@ -145,13 +158,13 @@ export default function App() {
               initial={{ opacity: 0, y: 24, scale: 0.985 }}
               animate={{
                 opacity: 1,
-                y: 0,
-                scale: 1,
-                x: getActiveStyle(currentIndex).x,
-                rotate: getActiveStyle(currentIndex).r,
+                y: isComplete ? 92 : 0,
+                scale: isComplete ? 0.17 : 1,
+                x: isComplete ? 275 : getActiveStyle(currentIndex).x,
+                rotate: isComplete ? -1.2 : getActiveStyle(currentIndex).r,
               }}
-              exit={{ opacity: 0, y: 40, scale: 0.98 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ opacity: 0, y: 26, scale: 0.98 }}
+              transition={{ duration: isComplete ? 0.95 : 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <Letter
                 section={activeSection}
@@ -189,13 +202,7 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      {returned && (
-        <div className="letter-returned">
-          <p className="letter-returned__text">
-            All letters read. Back in the envelope, until you open it again.
-          </p>
-        </div>
-      )}
+      {closing && <ReturnEnvelope onReplay={replay} />}
 
       {opened && (
         <MusicPlayer track={site.musicTrack} label={site.musicLabel} />

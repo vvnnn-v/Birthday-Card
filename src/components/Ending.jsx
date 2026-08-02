@@ -67,6 +67,7 @@ export default function Ending({ section, yourName, closingNote }) {
             <PhotoFrame
               src={section.image}
               alt={section.imageAlt || section.title}
+              index={7}
             />
           </Reveal>
         )}

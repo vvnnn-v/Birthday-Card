@@ -8,13 +8,13 @@ import { useState } from "react";
  * filename. Drop the real photo into public/assets/photos/ with the
  * same name and it appears automatically — no code changes needed.
  */
-export default function PhotoFrame({ src, alt = "", caption = "" }) {
+export default function PhotoFrame({ src, alt = "", caption = "", index = 0 }) {
   const [missing, setMissing] = useState(false);
 
   if (!src || missing) {
     const filename = src ? src.split("/").pop() : "photo.jpg";
     return (
-      <figure className="photo-frame photo-frame--placeholder">
+      <figure className="photo-frame photo-frame--placeholder" style={{ "--photo-tilt": `${index % 2 ? 1.2 : -1.3}deg` }}>
         <div className="photo-frame__paper">
           <span className="photo-frame__filename">{filename}</span>
           <span className="photo-frame__hint">your photo will appear here</span>
@@ -25,8 +25,10 @@ export default function PhotoFrame({ src, alt = "", caption = "" }) {
   }
 
   return (
-    <figure className="photo-frame">
+    <figure className="photo-frame" style={{ "--photo-tilt": `${index % 2 ? 1.2 : -1.3}deg` }}>
       <div className="photo-frame__tape" aria-hidden="true" />
+      <span className="photo-frame__corner photo-frame__corner--left" aria-hidden="true" />
+      <span className="photo-frame__corner photo-frame__corner--right" aria-hidden="true" />
       <img
         className="photo-frame__img"
         src={src}
@@ -34,6 +36,8 @@ export default function PhotoFrame({ src, alt = "", caption = "" }) {
         loading="lazy"
         onError={() => setMissing(true)}
       />
+      {index === 2 && <span className="photo-frame__flower" aria-hidden="true">❀</span>}
+      {index === 3 && <span className="photo-frame__duck" aria-hidden="true">♒</span>}
       {caption && <figcaption className="photo-frame__caption">{caption}</figcaption>}
     </figure>
   );
