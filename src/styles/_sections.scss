@@ -1,0 +1,156 @@
+@use "tokens" as *;
+
+// ─────────────────────────────────────────────────────────────
+//  LETTER SECTIONS — content inside each letter sheet
+// ─────────────────────────────────────────────────────────────
+
+.letter-section {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  display: flex;
+  align-items: center;
+  padding: $space-lg $space-md 5rem;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(216, 168, 77, 0.3) transparent;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(216, 168, 77, 0.3);
+    border-radius: 4px;
+  }
+}
+
+.letter-section__inner {
+  max-width: $content-max;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-lg;
+  align-items: center;
+
+  @media (min-width: 860px) {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+// Alternate layout — photo on the left.
+.letter-section--alt .letter-section__inner {
+  @media (min-width: 860px) {
+    grid-template-columns: 0.8fr 1.2fr;
+
+    .letter-section__media {
+      order: -1;
+    }
+  }
+}
+
+.letter-section__content {
+  max-width: 620px;
+}
+
+.letter-section__kicker {
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: $color-secondary;
+  margin-bottom: $space-sm;
+}
+
+.letter-section__title {
+  font-family: $font-serif;
+  font-weight: 500;
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  line-height: 1.15;
+  color: $color-text;
+  margin-bottom: $space-md;
+}
+
+.letter-section__paragraph {
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  line-height: 1.9;
+  color: $color-text;
+  margin-bottom: $space-md;
+  max-width: 58ch;
+}
+
+.letter-section__media {
+  display: flex;
+  justify-content: center;
+}
+
+// ── Ending ───────────────────────────────────────────────────
+
+.letter-section--ending {
+  position: relative;
+  text-align: center;
+}
+
+.letter-section--ending .letter-section__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.letter-section--ending .letter-section__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.letter-section--ending .letter-section__paragraph {
+  text-align: center;
+}
+
+.letter-section__signature {
+  font-family: $font-hand;
+  font-size: 1.6rem;
+  color: $color-secondary;
+  margin-top: $space-sm;
+}
+
+.letter-section__love {
+  font-family: $font-serif;
+  font-weight: 500;
+  font-size: clamp(2.2rem, 5.5vw, 3.8rem);
+  color: $color-text;
+  margin-top: $space-lg;
+  letter-spacing: 0.02em;
+}
+
+// ── Handwritten margin note ──────────────────────────────────
+
+.handwritten-note {
+  position: relative;
+  max-width: 240px;
+  margin: $space-md 0 $space-md auto;
+  padding: $space-sm $space-md;
+  background: rgba(216, 168, 77, 0.08);
+  border-left: 2px solid rgba(216, 168, 77, 0.4);
+  transform: rotate(-1.2deg);
+
+  @media (min-width: 860px) {
+    margin-left: auto;
+    margin-right: -1.5rem;
+  }
+}
+
+.handwritten-note__mark {
+  position: absolute;
+  top: -0.7rem;
+  left: -0.5rem;
+  color: $color-primary;
+  font-size: 1.1rem;
+}
+
+.handwritten-note__text {
+  font-family: $font-hand;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: $color-secondary;
+}

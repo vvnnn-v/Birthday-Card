@@ -1,0 +1,305 @@
+@use "tokens" as *;
+
+// ─────────────────────────────────────────────────────────────
+//  UI — two-stack letter layout, navigation, music, closure
+// ─────────────────────────────────────────────────────────────
+
+// ── Stage / viewport ─────────────────────────────────────────
+
+.letter {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+// ── Letter sheet (the paper itself) ──────────────────────────
+
+.letter-sheet {
+  position: relative;
+  width: min(760px, 92vw);
+  height: min(84vh, 760px);
+  margin: auto;
+  background: $color-paper;
+  border-radius: 3px;
+  box-shadow:
+    0 1px 2px rgba(45, 45, 45, 0.05),
+    0 12px 32px rgba(45, 45, 45, 0.12);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.letter-sheet__marker {
+  position: absolute;
+  top: 0.8rem;
+  right: 1.2rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(119, 119, 119, 0.55);
+  z-index: 2;
+  user-select: none;
+}
+
+.letter-sheet > .letter-section {
+  flex: 1;
+  min-height: 0;
+}
+
+// ── Active letter stage ──────────────────────────────────────
+
+.letter-stage {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+// ── The stacks (subtle supporting elements) ──────────────────
+
+.letter-stack {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.letter-stack--unread {
+  left: 1.5rem;
+}
+
+.letter-stack--read {
+  right: 1.5rem;
+}
+
+.letter-stack__peek {
+  position: absolute;
+  width: 86px;
+  height: 122px;
+  background: $color-paper;
+  border-radius: 2px;
+  box-shadow: 0 1px 3px rgba(45, 45, 45, 0.08);
+  border: 1px solid rgba(166, 124, 82, 0.08);
+}
+
+// ── Navigation ───────────────────────────────────────────────
+
+.letter-nav {
+  position: absolute;
+  bottom: 1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: $space-md;
+  z-index: 20;
+}
+
+.letter-nav__counter {
+  font-family: $font-serif;
+  font-size: 0.95rem;
+  color: $color-muted;
+  min-width: 3.5rem;
+  text-align: center;
+  letter-spacing: 0.08em;
+}
+
+.letter-nav__button {
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: $color-secondary;
+  padding: 0.55rem 1.1rem;
+  border: 1px solid rgba(166, 124, 82, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 253, 247, 0.7);
+  backdrop-filter: blur(4px);
+  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba(216, 168, 77, 0.12);
+    border-color: rgba(166, 124, 82, 0.6);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
+}
+
+.letter-nav__button--primary {
+  background: rgba(216, 168, 77, 0.15);
+  border-color: rgba(216, 168, 77, 0.55);
+  color: $color-secondary;
+
+  &:hover:not(:disabled) {
+    background: rgba(216, 168, 77, 0.25);
+  }
+}
+
+// ── Closure state ────────────────────────────────────────────
+
+.letter-returned {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: $space-lg;
+}
+
+.letter-returned__text {
+  font-family: $font-serif;
+  font-style: italic;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  color: $color-muted;
+  max-width: 34ch;
+  line-height: 1.6;
+}
+
+// ── Music player ─────────────────────────────────────────────
+
+.music-player {
+  position: fixed;
+  bottom: $space-md;
+  right: $space-md;
+  display: flex;
+  align-items: center;
+  gap: $space-sm;
+  z-index: 50;
+}
+
+.music-player__button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 30%,
+    #e6bd6d,
+    $color-primary 60%,
+    $color-secondary
+  );
+  box-shadow: 0 2px 8px rgba(166, 124, 82, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 14px rgba(166, 124, 82, 0.45);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-secondary;
+    outline-offset: 3px;
+  }
+}
+
+.music-player__disc {
+  color: $color-paper;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.music-player__play {
+  font-size: 0.85rem;
+  margin-left: 2px;
+}
+
+.music-player__pause {
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+}
+
+.music-player__label {
+  font-size: 0.78rem;
+  color: $color-muted;
+  max-width: 140px;
+  line-height: 1.4;
+}
+
+// ── Closing note (P.S.) ──────────────────────────────────────
+
+.closing-note {
+  position: absolute;
+  bottom: 4.5rem;
+  right: 1rem;
+  max-width: 280px;
+  padding: $space-sm $space-md;
+  background: $color-paper;
+  border-radius: $radius-sm;
+  box-shadow: $shadow-soft;
+  transform: rotate(-1.5deg);
+  border-right: 3px solid rgba(216, 168, 77, 0.5);
+}
+
+.closing-note__text {
+  font-family: $font-hand;
+  font-size: 1.3rem;
+  line-height: 1.5;
+  color: $color-secondary;
+  white-space: pre-line;
+}
+
+// ── Responsive ───────────────────────────────────────────────
+
+@media (max-width: 760px) {
+  .letter-sheet {
+    width: 94vw;
+    height: 80vh;
+  }
+
+  .letter-stack {
+    width: 70px;
+  }
+
+  .letter-stack--unread {
+    left: 0.5rem;
+  }
+
+  .letter-stack--read {
+    right: 0.5rem;
+  }
+
+  .letter-stack__peek {
+    width: 54px;
+    height: 78px;
+  }
+
+  .letter-nav {
+    gap: $space-sm;
+    width: 100%;
+    justify-content: center;
+    padding: 0 1rem;
+  }
+
+  .letter-nav__button {
+    font-size: 0.72rem;
+    padding: 0.5rem 0.8rem;
+  }
+
+  .closing-note {
+    bottom: 4.2rem;
+    right: 0.5rem;
+    left: 0.5rem;
+    max-width: none;
+  }
+}

@@ -1,0 +1,41 @@
+// ─────────────────────────────────────────────────────────────
+//  DESIGN TOKENS
+//  The entire visual language lives here.
+// ─────────────────────────────────────────────────────────────
+
+// Color palette
+$color-bg: #f8f4ec; // warm cream paper
+$color-primary: #d8a84d; // golden hour accent
+$color-secondary: #a67c52; // muted bronze
+$color-text: #2d2d2d; // soft ink
+$color-muted: #777777; // quiet grey
+$color-paper: #fffdf7; // card / letter paper
+$color-paper-deep: #f3ecdd; // slightly deeper paper
+$color-line: rgba(166, 124, 82, 0.18); // hairline rules
+
+// Typography
+$font-serif: "Cormorant Garamond", Georgia, serif;
+$font-sans: "Jost", "Segoe UI", sans-serif;
+$font-hand: "Caveat", cursive;
+
+// Spacing
+$space-xs: 0.5rem;
+$space-sm: 1rem;
+$space-md: 2rem;
+$space-lg: 4rem;
+$space-xl: 8rem;
+
+// Radii
+$radius-sm: 4px;
+$radius-md: 10px;
+$radius-lg: 18px;
+
+// Shadows — soft, paper-like
+$shadow-soft: 0 1px 2px rgba(45, 45, 45, 0.04),
+  0 8px 24px rgba(45, 45, 45, 0.06);
+$shadow-lift: 0 2px 4px rgba(45, 45, 45, 0.05),
+  0 16px 40px rgba(45, 45, 45, 0.1);
+
+// Layout
+$content-max: 1080px;
+$section-min-height: 100vh;
