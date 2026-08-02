@@ -25,6 +25,7 @@ export default function Section({ section, index, layout }) {
         index={index}
         caption={section.imageAlt}
         tape={layout?.photoTape}
+        objectPosition={section.imagePosition}
       />
     </Reveal>
   );

@@ -44,13 +44,18 @@ export default function App() {
   const {
     currentIndex,
     readCount,
-    restored,
-    hydrated,
     next,
     prev,
     isComplete,
     reset,
   } = useLetterStack(sections.length);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+  }, []);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -62,11 +67,7 @@ export default function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentIndex, readCount]);
 
-  useEffect(() => {
-    if (hydrated && restored) setOpened(true);
-  }, [hydrated, restored]);
-
-  const showEnvelope = !opened && !closing && !restored;
+  const showEnvelope = !opened && !closing;
 
   useEffect(() => {
     if (isComplete && opened && !closing) {

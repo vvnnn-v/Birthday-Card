@@ -8,6 +8,7 @@ export default function PhotoFrame({
   caption = "",
   index = 0,
   tape = false,
+  objectPosition,
 }) {
   const [loaded, setLoaded] = useState(false);
   const filename = src ? src.split("/").pop() : "photo.jpg";
@@ -43,6 +44,7 @@ export default function PhotoFrame({
             src={src}
             alt={alt}
             loading="eager"
+            style={objectPosition ? { objectPosition } : undefined}
             onLoad={() => setLoaded(true)}
           />
         )}

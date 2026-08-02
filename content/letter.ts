@@ -42,6 +42,9 @@ export interface LetterSection {
   /** Alt text for the photo. */
   imageAlt?: string;
 
+  /** Optional CSS object-position for photo cropping inside the frame. */
+  imagePosition?: string;
+
   /** Optional list of memories — renders the notebook drawer. */
   memories?: MemoryItem[];
 
@@ -108,6 +111,7 @@ export const sections: LetterSection[] = [
     ],
     image: "/assets/photos/04b-notices-little-things.jpg",
     imageAlt: "You notice little things",
+    imagePosition: "center top",
   },
   {
     id: "reminders",

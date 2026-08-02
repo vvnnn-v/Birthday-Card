@@ -43,13 +43,13 @@ export interface SiteConfig {
 }
 
 export const site: SiteConfig = {
-  herName: "Her Name",
-  yourName: "Your Name",
+  herName: "Elizabeth",
+  yourName: "Jeff",
 
-  title: "For Her Name",
+  title: "For Elizabeth",
   metaDescription: "A letter, written just for you.",
 
-  envelopeLabel: "for her birthday",
+  envelopeLabel: "for Elizabeth",
 
   letterDate: "August 2, 2026",
 

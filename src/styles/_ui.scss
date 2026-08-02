@@ -409,7 +409,7 @@
 
 // ── Responsive ───────────────────────────────────────────────
 
-@media (max-width: 960px) {
+@media (max-width: 1080px) {
   .letter-stack {
     display: none;
   }
@@ -449,5 +449,36 @@
     right: 1.75rem;
     left: 1.75rem;
     max-width: none;
+  }
+}
+
+// Tablet — iPad portrait and landscape
+@media (min-width: 761px) and (max-width: 1024px) {
+  .letter {
+    padding: 2rem 0 5.25rem;
+  }
+
+  .letter-sheet {
+    width: min($paper-width, 94vw);
+    padding: 2.75rem 2.5rem 3rem;
+  }
+
+  .letter-sheet__marker {
+    right: 2.5rem;
+  }
+
+  .letter-sheet__page-number {
+    left: 2.5rem;
+  }
+
+  .letter-nav__button {
+    min-height: 44px;
+    padding: 0.45rem 0.9rem;
+  }
+
+  .letter-section__media--float-right,
+  .letter-section__media--float-left {
+    width: clamp(120px, 26%, 200px);
+    max-width: 200px;
   }
 }

@@ -73,6 +73,8 @@ export default function Ending({ section, yourName, closingNote, layout }) {
 
                 tape={layout?.photoTape}
 
+                objectPosition={section.imagePosition}
+
               />
 
             </Reveal>
@@ -178,6 +180,8 @@ export default function Ending({ section, yourName, closingNote, layout }) {
                 caption={section.imageAlt}
 
                 tape={layout?.photoTape}
+
+                objectPosition={section.imagePosition}
 
               />
 

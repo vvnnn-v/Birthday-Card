@@ -14,56 +14,16 @@ const STORAGE_KEY = "skol-birthday-progress";
 export function useLetterStack(sectionCount) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [readCount, setReadCount] = useState(0);
-  const [restored, setRestored] = useState(false);
-  const [hydrated, setHydrated] = useState(false);
   const isComplete = readCount >= sectionCount && sectionCount > 0;
 
-  // Restore saved progress once on mount.
+  // Always start fresh — clear any legacy saved progress.
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const saved = JSON.parse(raw);
-        if (typeof saved.index === "number" && saved.index > 0) {
-          setCurrentIndex(Math.min(saved.index, sectionCount - 1));
-          setReadCount(Math.min(saved.index, sectionCount));
-          setRestored(true);
-        }
-      }
+      localStorage.removeItem(STORAGE_KEY);
     } catch {
-      /* ignore corrupted storage */
+      /* storage unavailable */
     }
-    setHydrated(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // Clear storage once all letters are read — returning should show the envelope.
-  useEffect(() => {
-    if (!hydrated) return;
-    if (isComplete) {
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {
-        /* storage unavailable */
-      }
-    }
-  }, [isComplete, hydrated]);
-
-  // Persist progress whenever it changes.
-  useEffect(() => {
-    if (!hydrated || isComplete) return;
-    const id = requestAnimationFrame(() => {
-      try {
-        localStorage.setItem(
-          STORAGE_KEY,
-          JSON.stringify({ index: currentIndex })
-        );
-      } catch {
-        /* storage unavailable */
-      }
-    });
-    return () => cancelAnimationFrame(id);
-  }, [currentIndex, hydrated, isComplete]);
 
   const next = () => {
     if (readCount >= sectionCount) return;
@@ -89,7 +49,6 @@ export function useLetterStack(sectionCount) {
   const reset = () => {
     setCurrentIndex(0);
     setReadCount(0);
-    setRestored(false);
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -104,8 +63,6 @@ export function useLetterStack(sectionCount) {
   return {
     currentIndex,
     readCount,
-    restored,
-    hydrated,
     next,
     prev,
     goTo,

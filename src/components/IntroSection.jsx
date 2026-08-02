@@ -55,6 +55,8 @@ export default function IntroSection({ section, herName, letterDate, layout }) {
 
                 tape={layout?.photoTape}
 
+                objectPosition={section.imagePosition}
+
               />
 
             </Reveal>
@@ -176,6 +178,8 @@ export default function IntroSection({ section, herName, letterDate, layout }) {
                 caption={section.imageAlt}
 
                 tape={layout?.photoTape}
+
+                objectPosition={section.imagePosition}
 
               />
 
