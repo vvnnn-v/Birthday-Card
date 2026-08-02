@@ -33,12 +33,25 @@
   z-index: 1;
 }
 
-.photo-frame__img {
-  width: 100%;
+.photo-frame__media {
+  position: relative;
   aspect-ratio: 4 / 3;
+}
+
+.photo-frame__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 2px;
   background: $color-paper-deep;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.photo-frame__img--loaded {
+  opacity: 1;
 }
 
 .photo-frame__caption {
@@ -56,7 +69,8 @@
 }
 
 .photo-frame__paper {
-  aspect-ratio: 4 / 3;
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
