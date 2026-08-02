@@ -21,12 +21,13 @@ export function useLetterStack(sectionCount) {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) return;
-      const saved = JSON.parse(raw);
-      if (typeof saved.index === "number" && saved.index > 0) {
-        setCurrentIndex(Math.min(saved.index, sectionCount - 1));
-        setReadCount(Math.min(saved.index, sectionCount));
-        setRestored(true);
+      if (raw) {
+        const saved = JSON.parse(raw);
+        if (typeof saved.index === "number" && saved.index > 0) {
+          setCurrentIndex(Math.min(saved.index, sectionCount - 1));
+          setReadCount(Math.min(saved.index, sectionCount));
+          setRestored(true);
+        }
       }
     } catch {
       /* ignore corrupted storage */

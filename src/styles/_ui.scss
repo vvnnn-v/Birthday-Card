@@ -313,11 +313,11 @@
 // The ending is a small return ritual, not a confirmation screen.
 .return-envelope { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; overflow: hidden; }
 .return-envelope__warmth { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 42%, rgba(216,168,77,.18), rgba(45,45,45,.12) 100%); backdrop-filter: blur(3px); }
-.return-envelope__assembly { position: relative; width: min(420px,84vw); aspect-ratio: 8 / 5; z-index: 1; }
+.return-envelope__assembly { position: relative; width: min(420px,84vw); aspect-ratio: 8 / 5; z-index: 1; background: $color-paper; border-radius: $radius-md; box-shadow: $shadow-lift; perspective: 900px; transform-style: preserve-3d; }
 .return-envelope__body, .return-envelope__flap { position: absolute; left: 0; width: 100%; }
 .return-envelope__body { bottom: 0; height: 66%; z-index: 3; background: $color-paper; border-radius: 0 0 $radius-md $radius-md; box-shadow: $shadow-lift; }
-.return-envelope__flap { top: 0; height: 58%; z-index: 5; transform-origin: top center; transform-style: preserve-3d; clip-path: polygon(0 0,100% 0,50% 100%); background: $color-paper-deep; border-radius: $radius-md $radius-md 0 0; }
-.return-envelope__stack { position: absolute; left: 50%; width: 68%; height: 70%; margin-left: -34%; z-index: 2; transform-origin: bottom center; }
+.return-envelope__flap { top: 0; height: 55%; z-index: 4; transform-origin: top center; transform-style: preserve-3d; clip-path: polygon(0 0,100% 0,50% 100%); background: $color-paper-deep; border-radius: $radius-md $radius-md 0 0; }
+.return-envelope__stack { position: absolute; left: 50%; bottom: 13%; width: 68%; height: 73%; margin-left: -34%; z-index: 2; transform-origin: bottom center; }
 .return-envelope__sheet { position: absolute; inset: 0; background: $color-paper; border: 1px solid rgba(166,124,82,.09); box-shadow: 0 2px 5px rgba(45,45,45,.09); transform: translate(calc(var(--sheet) * 2px),calc(var(--sheet) * -2px)) rotate(calc(var(--sheet) * .35deg)); }
 .return-envelope__seal { position: absolute; left: 50%; top: 43%; z-index: 6; width: 48px; height: 48px; display: grid; place-items: center; transform: translate(-50%,-50%); border-radius: 50%; background: radial-gradient(circle at 35% 30%,#e6bd6d,$color-primary 60%,$color-secondary); color: $color-paper; box-shadow: 0 2px 6px rgba(166,124,82,.35); }
 .return-envelope__note { position: absolute; top: calc(50% - min(220px, 27vh)); z-index: 10; width: min(390px,82vw); padding: 1.25rem 1.4rem 1rem; background: #fff9d6; color: $color-text; box-shadow: 0 7px 20px rgba(45,45,45,.12); }

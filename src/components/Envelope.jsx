@@ -26,7 +26,7 @@ export default function Envelope({ herName, label, onOpen }) {
         <motion.div
           className="envelope-letter"
           initial={false}
-          animate={{ y: opened ? -154 : 0, opacity: 1 }}
+          animate={{ y: opened ? -154 : 0, opacity: opened ? 1 : 0 }}
           transition={{ duration: 1.25, delay: opened ? 0.24 : 0, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="envelope-letter__greeting">Dear {herName},</p>
@@ -40,9 +40,6 @@ export default function Envelope({ herName, label, onOpen }) {
           transition={{ duration: 0.95, ease: [0.32, 0, 0.15, 1] }}
         />
         <span className="envelope__body" aria-hidden="true" />
-        <motion.span className="envelope__seal" aria-hidden="true" initial={false} animate={{ opacity: opened ? 0 : 1, scale: opened ? 0.92 : 1 }} transition={{ duration: 0.28, ease: "easeOut" }}>
-          <span className="envelope__seal-heart">♥</span>
-        </motion.span>
         <motion.span className="envelope__label" animate={{ opacity: opened ? 0 : 1 }}>{label || "for you"}</motion.span>
         <motion.span className="envelope__hint" animate={{ opacity: opened ? 0 : 1 }}>tap to open</motion.span>
       </motion.button>
