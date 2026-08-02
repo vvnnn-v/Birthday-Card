@@ -1,156 +1,275 @@
 @use "tokens" as *;
 
 // ─────────────────────────────────────────────────────────────
-//  LETTER SECTIONS — content inside each letter sheet
+//  LETTER SECTIONS — document typography and natural flow
 // ─────────────────────────────────────────────────────────────
 
 .letter-section {
-  height: 100%;
   width: 100%;
-  overflow-y: auto;
-  display: flex;
-  align-items: center;
-  padding: $space-lg $space-md 5rem;
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(216, 168, 77, 0.3) transparent;
-
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(216, 168, 77, 0.3);
-    border-radius: 4px;
-  }
+  position: relative;
+  z-index: 2;
 }
 
 .letter-section__inner {
-  max-width: $content-max;
-  margin: 0 auto;
   width: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: $space-lg;
-  align-items: center;
-
-  @media (min-width: 860px) {
-    grid-template-columns: 1.2fr 0.8fr;
-  }
+  max-width: $reading-measure;
+  position: relative;
 }
 
-// Alternate layout — photo on the left.
-.letter-section--alt .letter-section__inner {
-  @media (min-width: 860px) {
-    grid-template-columns: 0.8fr 1.2fr;
-
-    .letter-section__media {
-      order: -1;
-    }
-  }
-}
-
-.letter-section__content {
-  max-width: 620px;
-}
+// ── Typography hierarchy ─────────────────────────────────────
 
 .letter-section__kicker {
-  font-size: 0.78rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: $color-secondary;
-  margin-bottom: $space-sm;
+  font-family: $font-hand;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: rgba(138, 133, 128, 0.85);
+  margin-bottom: 0.35rem;
 }
 
 .letter-section__title {
   font-family: $font-serif;
-  font-weight: 500;
-  font-size: clamp(2rem, 4.5vw, 3.2rem);
-  line-height: 1.15;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 2.2vw, 1.45rem);
+  line-height: 1.35;
   color: $color-text;
-  margin-bottom: $space-md;
+  margin-bottom: 1.1rem;
+  letter-spacing: 0.015em;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid rgba(138, 115, 85, 0.12);
 }
 
 .letter-section__paragraph {
-  font-size: clamp(1rem, 1.5vw, 1.12rem);
-  line-height: 1.9;
+  font-family: $font-sans;
+  font-weight: 300;
+  font-size: 1.0625rem;
+  line-height: 1.95;
   color: $color-text;
-  margin-bottom: $space-md;
-  max-width: 58ch;
+  margin-bottom: 1.35rem;
+  max-width: $reading-measure;
+  text-align: left;
+  hyphens: auto;
+
+  em {
+    font-style: italic;
+    font-weight: inherit;
+    letter-spacing: 0.005em;
+  }
+}
+
+.letter-section__paragraph:last-of-type {
+  margin-bottom: 0;
+}
+
+// ── Intro letter opening ─────────────────────────────────────
+
+.letter-section--intro .letter-section__inner {
+  padding-top: 0;
+}
+
+.letter-intro__header {
+  margin-bottom: 2rem;
+}
+
+.letter-intro__date {
+  font-family: $font-hand;
+  font-size: 1.08rem;
+  color: $color-muted;
+  text-align: right;
+  margin-bottom: 1.5rem;
+  padding-right: 0.15rem;
+}
+
+.letter-section--intro .letter-section__kicker {
+  font-family: $font-serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: $color-muted;
+  margin-bottom: 0.4rem;
+}
+
+.letter-intro__title {
+  font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+  font-weight: 400;
+  font-style: normal;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+  color: $color-text;
+}
+
+.letter-intro__greeting {
+  font-family: $font-serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: $color-text;
+  margin-top: 1.65rem;
+  margin-bottom: 0;
+  letter-spacing: 0.01em;
+}
+
+.letter-intro__body-start {
+  margin-top: 1.85rem;
+}
+
+.letter-intro__first-paragraph {
+  margin-top: 0;
+}
+
+// ── Document flow with floated memories ──────────────────────
+
+.letter-section__body {
+  width: 100%;
+}
+
+.letter-section__content {
+  position: relative;
+}
+
+.letter-section__header {
+  margin-bottom: 0.15rem;
+}
+
+.letter-section__header + .letter-section__paragraph {
+  margin-top: 0.25rem;
 }
 
 .letter-section__media {
-  display: flex;
-  justify-content: center;
+  margin: 0 0 $space-md;
+
+  &--float-right {
+    float: right;
+    clear: right;
+    margin: 0.15rem 0 1rem 1.35rem;
+    width: clamp(120px, $photo-width-max, 240px);
+    max-width: $photo-width-max;
+    min-width: $photo-width-min;
+  }
+
+  &--float-left {
+    float: left;
+    clear: left;
+    margin: 0.15rem 1.35rem 1rem 0;
+    width: clamp(120px, $photo-width-max, 240px);
+    max-width: $photo-width-max;
+    min-width: $photo-width-min;
+  }
+
+  &--inline {
+    margin: 1.65rem auto;
+    width: clamp(120px, 28%, 220px);
+    max-width: $photo-width-max;
+    min-width: $photo-width-min;
+  }
+}
+
+.letter-section__body::after {
+  content: "";
+  display: table;
+  clear: both;
 }
 
 // ── Ending ───────────────────────────────────────────────────
 
-.letter-section--ending {
-  position: relative;
-  text-align: center;
-}
-
 .letter-section--ending .letter-section__inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  max-width: $reading-measure;
 }
 
-.letter-section--ending .letter-section__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.letter-section--ending .letter-section__title {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 1.25rem;
 }
 
 .letter-section--ending .letter-section__paragraph {
-  text-align: center;
+  text-align: left;
+}
+
+.letter-section__signature-block {
+  margin-top: 2rem;
+  padding-top: 0.5rem;
 }
 
 .letter-section__signature {
   font-family: $font-hand;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   color: $color-secondary;
-  margin-top: $space-sm;
+  margin-top: 0;
 }
 
 .letter-section__love {
-  font-family: $font-serif;
-  font-weight: 500;
-  font-size: clamp(2.2rem, 5.5vw, 3.8rem);
-  color: $color-text;
-  margin-top: $space-lg;
-  letter-spacing: 0.02em;
+  font-family: $font-hand;
+  font-weight: 400;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  color: $color-secondary;
+  margin-top: 1.25rem;
+  letter-spacing: 0.01em;
 }
 
 // ── Handwritten margin note ──────────────────────────────────
 
 .handwritten-note {
   position: relative;
-  max-width: 240px;
-  margin: $space-md 0 $space-md auto;
-  padding: $space-sm $space-md;
-  background: rgba(216, 168, 77, 0.08);
-  border-left: 2px solid rgba(216, 168, 77, 0.4);
-  transform: rotate(-1.2deg);
-
-  @media (min-width: 860px) {
-    margin-left: auto;
-    margin-right: -1.5rem;
-  }
-}
-
-.handwritten-note__mark {
-  position: absolute;
-  top: -0.7rem;
-  left: -0.5rem;
-  color: $color-primary;
-  font-size: 1.1rem;
+  max-width: 210px;
+  margin: $space-md 0;
+  padding: 0.5rem 0 0.5rem 0.85rem;
+  border-left: 1.5px solid rgba(201, 160, 90, 0.28);
 }
 
 .handwritten-note__text {
   font-family: $font-hand;
-  font-size: 1.3rem;
-  line-height: 1.5;
+  font-size: 1.1rem;
+  line-height: 1.4;
   color: $color-secondary;
+}
+
+@media (min-width: 700px) {
+  .handwritten-note--margin {
+    float: right;
+    clear: right;
+    margin: 0.35rem 0 0.85rem 1.75rem;
+    max-width: 185px;
+  }
+}
+
+// ── Responsive ───────────────────────────────────────────────
+
+@media (max-width: 760px) {
+  .letter-intro__date {
+    margin-bottom: 1.15rem;
+  }
+
+  .letter-intro__header {
+    margin-bottom: 1.5rem;
+  }
+
+  .letter-intro__greeting {
+    margin-top: 1.35rem;
+  }
+
+  .letter-intro__body-start {
+    margin-top: 1.5rem;
+  }
+
+  .letter-section__media--float-right,
+  .letter-section__media--float-left {
+    float: none;
+    width: $photo-width-mobile;
+    max-width: $photo-width-mobile;
+    min-width: 0;
+    margin: 0 auto 1.15rem;
+  }
+
+  .letter-section__media--inline {
+    width: $photo-width-mobile;
+    max-width: $photo-width-mobile;
+    min-width: 0;
+    margin: 1.25rem auto;
+  }
+
+  .handwritten-note--margin {
+    float: none;
+    max-width: none;
+    margin: $space-md 0;
+  }
 }

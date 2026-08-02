@@ -16,6 +16,7 @@ export function useLetterStack(sectionCount) {
   const [readCount, setReadCount] = useState(0);
   const [restored, setRestored] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const isComplete = readCount >= sectionCount && sectionCount > 0;
 
   // Restore saved progress once on mount.
   useEffect(() => {
@@ -36,9 +37,21 @@ export function useLetterStack(sectionCount) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Persist progress whenever it changes.
+  // Clear storage once all letters are read — returning should show the envelope.
   useEffect(() => {
     if (!hydrated) return;
+    if (isComplete) {
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {
+        /* storage unavailable */
+      }
+    }
+  }, [isComplete, hydrated]);
+
+  // Persist progress whenever it changes.
+  useEffect(() => {
+    if (!hydrated || isComplete) return;
     const id = requestAnimationFrame(() => {
       try {
         localStorage.setItem(
@@ -50,7 +63,7 @@ export function useLetterStack(sectionCount) {
       }
     });
     return () => cancelAnimationFrame(id);
-  }, [currentIndex, hydrated]);
+  }, [currentIndex, hydrated, isComplete]);
 
   const next = () => {
     if (readCount >= sectionCount) return;
@@ -87,7 +100,6 @@ export function useLetterStack(sectionCount) {
   const hasRead = (index) => index < readCount;
   const isCurrent = (index) => index === currentIndex;
   const isUnread = (index) => index >= readCount;
-  const isComplete = readCount >= sectionCount && sectionCount > 0;
 
   return {
     currentIndex,

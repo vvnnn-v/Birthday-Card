@@ -1,0 +1,69 @@
+@use "tokens" as *;
+
+// ─────────────────────────────────────────────────────────────
+//  PAGE STICKERS — subtle discoveries in the margins
+//  Placed outside the reading measure, never over text.
+// ─────────────────────────────────────────────────────────────
+
+.page-sticker {
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+  z-index: 3;
+  opacity: 0.78;
+  filter: drop-shadow(0 1px 2px rgba(44, 42, 40, 0.06));
+}
+
+.page-sticker--top-left {
+  top: 2.75rem;
+  left: 0.85rem;
+}
+
+.page-sticker--top-right {
+  top: 3rem;
+  right: 0.85rem;
+}
+
+.page-sticker--bottom-left {
+  bottom: 2.75rem;
+  left: 0.85rem;
+}
+
+.page-sticker--bottom-right {
+  bottom: 3rem;
+  right: 0.85rem;
+}
+
+// Mid-margin positions for variety without overlapping text
+.page-sticker--mid-left {
+  top: 50%;
+  left: 0.65rem;
+  transform: translateY(-50%);
+}
+
+.page-sticker--mid-right {
+  top: 50%;
+  right: 0.65rem;
+  transform: translateY(-50%);
+}
+
+@media (max-width: 760px) {
+  .page-sticker {
+    opacity: 0.58;
+  }
+
+  .page-sticker--top-left,
+  .page-sticker--top-right {
+    top: 1.75rem;
+  }
+
+  .page-sticker--bottom-left,
+  .page-sticker--bottom-right {
+    bottom: 2.25rem;
+  }
+
+  .page-sticker--mid-left,
+  .page-sticker--mid-right {
+    display: none;
+  }
+}

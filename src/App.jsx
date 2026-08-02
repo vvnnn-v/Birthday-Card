@@ -8,32 +8,37 @@ import MusicPlayer from "./components/MusicPlayer";
 import ReturnEnvelope from "./components/ReturnEnvelope";
 import { useLetterStack } from "./hooks/useLetterStack";
 
-/**
- * The two-stack letter experience.
- *
- * The reader works through a physical stack of letters:
- *  - the active letter is always the visual focus (center, readable)
- *  - the unread stack sits on the left, subtly visible
- *  - the read stack sits on the right, growing as letters are read
- *  - when all letters are read, the stack returns to the envelope
- *
- * Everything is data-driven from content/letter.ts — the UI never
- * needs to change when content changes.
- */
+/** Apply site metadata to the document once on mount. */
+function useDocumentMeta() {
+  useEffect(() => {
+    if (site.title) document.title = site.title;
+    if (site.metaDescription) {
+      let meta = document.querySelector('meta[name="description"]');
+      if (!meta) {
+        meta = document.createElement("meta");
+        meta.name = "description";
+        document.head.appendChild(meta);
+      }
+      meta.content = site.metaDescription;
+    }
+  }, []);
+}
 
-// Deterministic "hand-placed" offsets so no letter sits perfectly alike.
+// Subtle hand-placed offsets — no two pages sit perfectly alike.
 const activeOffsets = [
-  { x: 8, y: -6, r: 0.5 },
-  { x: -10, y: 4, r: -0.6 },
-  { x: 6, y: 8, r: 0.4 },
-  { x: -7, y: -4, r: -0.45 },
-  { x: 12, y: 6, r: 0.65 },
-  { x: -5, y: 9, r: -0.35 },
-  { x: 9, y: -8, r: 0.55 },
-  { x: -11, y: 3, r: -0.7 },
+  { x: 4, y: -3, r: 0.3 },
+  { x: -5, y: 2, r: -0.35 },
+  { x: 3, y: 4, r: 0.25 },
+  { x: -4, y: -2, r: -0.28 },
+  { x: 6, y: 3, r: 0.4 },
+  { x: -3, y: 5, r: -0.22 },
+  { x: 5, y: -4, r: 0.32 },
+  { x: -6, y: 2, r: -0.38 },
 ];
 
 export default function App() {
+  useDocumentMeta();
+
   const [opened, setOpened] = useState(false);
   const [closing, setClosing] = useState(false);
   const {
@@ -47,7 +52,6 @@ export default function App() {
     reset,
   } = useLetterStack(sections.length);
 
-  // Keyboard navigation — intentional, no autoplay.
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "ArrowRight") next();
@@ -62,12 +66,8 @@ export default function App() {
     if (hydrated && restored) setOpened(true);
   }, [hydrated, restored]);
 
-  // Show the envelope on first visit, or after reading all letters
-  // (the closure moment). When returning mid-way on a refresh,
-  // skip straight back to the letter.
-  const showEnvelope = hydrated && !opened && !closing && !restored;
+  const showEnvelope = !opened && !closing && !restored;
 
-  // Once all letters are read, pause, then return the stack to the envelope.
   useEffect(() => {
     if (isComplete && opened && !closing) {
       const t = setTimeout(() => {
@@ -105,14 +105,12 @@ export default function App() {
         />
       )}
 
-      <AnimatePresence>
-        {opened && (
+      {opened && (
         <motion.main
           className="letter"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: 40, scale: 0.98 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6 }}
         >
           {/* Unread stack — left, subtle */}
           <div className="letter-stack letter-stack--unread" aria-hidden="true">
@@ -121,11 +119,11 @@ export default function App() {
                 key={section.id}
                 className="letter-stack__peek"
                 layout
-                initial={{ opacity: 0.4 }}
+                initial={{ opacity: 0.3 }}
                 animate={{
-                  opacity: 0.35 - i * 0.06,
-                  y: i * 6,
-                  rotate: (i % 2 === 0 ? 1 : -1) * (0.6 + i * 0.1),
+                  opacity: 0.28 - i * 0.05,
+                  y: i * 5,
+                  rotate: (i % 2 === 0 ? 1 : -1) * (0.5 + i * 0.08),
                 }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               />
@@ -139,38 +137,43 @@ export default function App() {
                 key={section.id}
                 className="letter-stack__peek"
                 layout
-                initial={{ opacity: 0.3 }}
+                initial={{ opacity: 0.25 }}
                 animate={{
-                  opacity: 0.3 - i * 0.05,
-                  y: i * 5,
-                  rotate: (i % 2 === 0 ? -1 : 1) * (0.5 + i * 0.1),
+                  opacity: 0.25 - i * 0.04,
+                  y: i * 4,
+                  rotate: (i % 2 === 0 ? -1 : 1) * (0.4 + i * 0.08),
                 }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               />
             ))}
           </div>
 
-          {/* The active letter — the visual focus */}
+          {/* Active page — grows naturally, not centered in viewport */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeSection.id}
               className="letter-stage"
-              initial={{ opacity: 0, y: 24, scale: 0.985 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{
                 opacity: 1,
-                y: isComplete ? 92 : 0,
-                scale: isComplete ? 0.17 : 1,
-                x: isComplete ? 275 : getActiveStyle(currentIndex).x,
-                rotate: isComplete ? -1.2 : getActiveStyle(currentIndex).r,
+                y: isComplete ? 120 : 0,
+                scale: isComplete ? 0.15 : 1,
+                x: isComplete ? 280 : getActiveStyle(currentIndex).x,
+                rotate: isComplete ? -1 : getActiveStyle(currentIndex).r,
               }}
-              exit={{ opacity: 0, y: 26, scale: 0.98 }}
-              transition={{ duration: isComplete ? 0.95 : 0.8, ease: [0.22, 1, 0.36, 1] }}
+              exit={{ opacity: 0, y: 20 }}
+              transition={{
+                duration: isComplete ? 0.95 : 0.7,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
               <Letter
                 section={activeSection}
                 index={currentIndex}
                 total={sections.length}
                 yourName={site.yourName}
+                herName={site.herName}
+                letterDate={site.letterDate}
                 closingNote={site.closingNote}
               />
             </motion.div>
@@ -199,8 +202,7 @@ export default function App() {
             </button>
           </div>
         </motion.main>
-        )}
-      </AnimatePresence>
+      )}
 
       {closing && <ReturnEnvelope onReplay={replay} />}
 

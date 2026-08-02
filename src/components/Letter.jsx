@@ -1,24 +1,31 @@
 import Section from "./Section";
+import IntroSection from "./IntroSection";
 import Ending from "./Ending";
+import PageSticker from "./PageSticker";
+import { getPageLayout } from "../config/pageDecorations";
 
 /**
- * A single handwritten letter sheet.
- * Rendered inside the two-stack experience. Designed to feel like
- * a real sheet of paper on a desk — never perfectly aligned.
+ * A single sheet of premium stationery with subtle page personality.
  */
 export default function Letter({
   section,
   index,
   total,
   yourName,
+  herName,
+  letterDate,
   closingNote,
 }) {
   const placement = [
-    { x: 3, y: -2, r: 0.35, shadow: 0.11 },
-    { x: -5, y: 3, r: -0.45, shadow: 0.14 },
-    { x: 4, y: 2, r: 0.28, shadow: 0.1 },
-    { x: -3, y: -3, r: -0.3, shadow: 0.13 },
+    { x: 2, y: -1, r: 0.25 },
+    { x: -3, y: 2, r: -0.3 },
+    { x: 3, y: 1, r: 0.2 },
+    { x: -2, y: -2, r: -0.22 },
   ][index % 4];
+
+  const layout = getPageLayout(index);
+  const isIntro = index === 0 && section.id === "intro";
+  const isEnding = section.type === "ending";
 
   return (
     <article
@@ -27,26 +34,35 @@ export default function Letter({
         "--paper-x": `${placement.x}px`,
         "--paper-y": `${placement.y}px`,
         "--paper-tilt": `${placement.r}deg`,
-        "--paper-shadow": placement.shadow,
       }}
     >
       <span className="letter-sheet__marker" aria-hidden="true">
-        letter {index + 1} of {total}
+        {index + 1} of {total}
       </span>
       <span className="letter-sheet__page-number" aria-hidden="true">
         {String(index + 1).padStart(2, "0")}
       </span>
-      <span className="letter-sheet__ink-smudge" aria-hidden="true" />
-      {index === 0 && <span className="letter-sheet__frog" aria-hidden="true">♧</span>}
-      {index === 2 && <span className="letter-sheet__sticky" aria-hidden="true">♥</span>}
-      {section.type === "ending" ? (
+
+      {layout.stickers?.map((sticker) => (
+        <PageSticker key={`${sticker.id}-${sticker.position}`} {...sticker} />
+      ))}
+
+      {isEnding ? (
         <Ending
           section={section}
           yourName={yourName}
           closingNote={closingNote}
+          layout={layout}
+        />
+      ) : isIntro ? (
+        <IntroSection
+          section={section}
+          herName={herName}
+          letterDate={letterDate}
+          layout={layout}
         />
       ) : (
-        <Section section={section} index={index} />
+        <Section section={section} index={index} layout={layout} />
       )}
     </article>
   );

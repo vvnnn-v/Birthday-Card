@@ -23,6 +23,9 @@ export interface SiteConfig {
   /** A short line on the envelope, e.g. "for her birthday". */
   envelopeLabel: string;
 
+  /** Optional date shown on the opening letter page (presentation only). */
+  letterDate?: string;
+
   /** Optional music track. Drop an MP3 into public/assets/audio/
    *  and set this to its path, e.g. "/assets/audio/our-song.mp3".
    *  Leave empty ("") to hide the music player entirely. */
@@ -48,12 +51,10 @@ export const site: SiteConfig = {
 
   envelopeLabel: "for her birthday",
 
+  letterDate: "August 2, 2026",
+
   musicTrack: "",
   musicLabel: "a little music, if you'd like",
 
-  closingNote: `
-P.S.
-
-I'll probably think of ten more things after I finish this.
-`,
+  closingNote: `P.S. Sorry if this letter is a little janky.`,
 };

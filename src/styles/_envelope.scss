@@ -18,14 +18,15 @@
   aspect-ratio: 8 / 5;
   background: $color-paper;
   border-radius: $radius-md;
-  box-shadow: $shadow-lift;
+  box-shadow: $shadow-paper;
   transition: transform 0.4s ease;
-  perspective: 900px;
-  transform-style: preserve-3d;
   overflow: visible;
+  padding: 0;
+  border: none;
+  cursor: pointer;
 
   &:hover:not(:disabled) {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
   }
 
   &:focus-visible {
@@ -38,7 +39,6 @@
   }
 }
 
-// The flap — a triangle folded over the top.
 .envelope__flap {
   position: absolute;
   top: 0;
@@ -53,7 +53,6 @@
   z-index: 4;
 }
 
-// The body — the lower rectangle of the envelope.
 .envelope__body {
   position: absolute;
   bottom: 0;
@@ -65,48 +64,19 @@
   z-index: 3;
 }
 
-// Wax seal.
-.envelope__seal {
-  display: none;
-  position: absolute;
-  top: 44%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #e6bd6d, $color-primary 60%, $color-secondary);
-  box-shadow: 0 2px 6px rgba(166, 124, 82, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-
-.envelope__seal-heart {
-  color: $color-paper;
-  font-size: 1.6rem;
-  line-height: 1;
-}
-
 .envelope__label {
   position: absolute;
   bottom: 18%;
   left: 50%;
   transform: translateX(-50%);
   font-family: $font-serif;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-style: italic;
   color: $color-secondary;
   letter-spacing: 0.02em;
   white-space: nowrap;
   z-index: 5;
-  transition: opacity 0.28s ease, transform 0.28s ease;
-}
-
-.envelope--opened .envelope__seal {
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.92);
+  transition: opacity 0.28s ease;
 }
 
 .envelope::after {
@@ -115,16 +85,21 @@
   top: 44%;
   left: 50%;
   z-index: 8;
-  width: 64px;
-  height: 64px;
+  width: 56px;
+  height: 56px;
   display: grid;
   place-items: center;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #e6bd6d, $color-primary 60%, $color-secondary);
-  box-shadow: 0 2px 6px rgba(166, 124, 82, 0.4);
+  background: radial-gradient(
+    circle at 35% 30%,
+    #d4b06a,
+    $color-primary 60%,
+    $color-secondary
+  );
+  box-shadow: 0 2px 6px rgba(138, 115, 85, 0.3);
   color: $color-paper;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   line-height: 1;
   transition: opacity 0.28s ease, transform 0.28s ease;
 }
@@ -136,18 +111,17 @@
 
 .envelope__hint {
   position: absolute;
-  bottom: -2.2rem;
+  bottom: -2rem;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-family: $font-serif;
+  font-size: 0.78rem;
+  font-style: italic;
   color: $color-muted;
   white-space: nowrap;
   z-index: 5;
 }
 
-// The letter that rises out after opening.
 .envelope-letter {
   position: absolute;
   left: 10%;
@@ -158,18 +132,20 @@
   text-align: center;
   padding: 1.3rem $space-md;
   background: $color-paper;
-  box-shadow: 0 2px 7px rgba(45, 45, 45, 0.08);
+  box-shadow: $shadow-soft;
 }
 
 .envelope-letter__greeting {
   font-family: $font-serif;
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
   color: $color-text;
   margin-bottom: 0.35rem;
 }
 
 .envelope-letter__line {
-  font-size: 0.95rem;
+  font-family: $font-serif;
+  font-size: 0.92rem;
+  font-style: italic;
   color: $color-muted;
 }
 
@@ -179,6 +155,6 @@
   }
 
   .envelope-letter__greeting {
-    font-size: 1.65rem;
+    font-size: 1.55rem;
   }
 }
